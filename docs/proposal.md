@@ -1,6 +1,6 @@
 # Proposal IM5 – Portfolio Thomas Häder
 
-**Projekttitel:** Portfolio Thomas Häder – Brightside Entertainment
+**Projekttitel:** Portfolio Thomas Häder
 
 **Fragestellung:**
 Wie präsentiere ich ein breites, medienübergreifendes Portfolio (Film, Audio, Branding, Podcast, Moderation) so, dass Besuchende schnell das Passende finden und ich die Inhalte selbst unkompliziert pflegen kann?
