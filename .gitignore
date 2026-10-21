@@ -1,0 +1,21 @@
+# --- Sensible Daten (NIE ins Repo) ---
+.env
+.env.*
+public/includes/config.php
+*.sql.bak
+
+# --- System / Editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# --- Uploads & grosse Medien (gehören auf den Server, nicht ins Repo) ---
+public/uploads/*
+!public/uploads/.gitkeep
+
+# --- Dependencies / Logs ---
+node_modules/
+vendor/
+*.log
