@@ -1,13 +1,23 @@
 # Portfolio Thomas Häder
 
 > IM5 Ateliersemester · FHGR Multimedia Production · HS26
-> Live: **https://DEINE-SUBDOMAIN.ch** <!-- anpassen -->
+> Live: **https://thomas.haeder.asolucim.myhostpoint.ch**
 
 ## Projektidee
 
-Eine persönliche Portfolio-Website, die meine Arbeit mit Brightside Entertainment zeigt: Film, Audio, Branding, Podcast und Moderation. Die Projekte werden nicht fix ins HTML geschrieben, sondern aus einer Datenbank geladen und über einen eigenen, geschützten Admin-Bereich gepflegt.
+Eine persönliche Portfolio-Website für meine Arbeit als Moderator, Podcast-Produzent und Filmer. Die Projekte werden nicht fix ins HTML geschrieben, sondern aus einer Datenbank geladen und über einen eigenen, geschützten Admin-Bereich gepflegt.
 
 **Fragestellung:** Wie präsentiere ich ein breites, medienübergreifendes Portfolio so, dass Besuchende schnell finden, was sie interessiert – und ich die Inhalte selbst einfach aktuell halten kann?
+
+## Gestaltungskonzept: «Der Gastgeber, hörbar»
+
+Ich habe lange als Butler und Sommelier gearbeitet, heute moderiere und produziere ich. Der rote Faden ist das Empfangen und Führen von Menschen. Die Seite übersetzt das so:
+
+- **Stimme statt Effekt:** Ein eigener Audio-Player (Web Audio API) zeigt die Wellenform aus der echten Aufnahme und liest das Transkript synchron mit. Nichts startet automatisch.
+- **Typografie:** Serif mit Kursive für die poetische Seite, Mono für Studio-Metadaten (Formate, Timecodes).
+- **Farbe:** heller Leinengrund, Tinte, ein einziger Akzent in Rotwein.
+- **Bewegung:** nur Einblenden beim ersten Erscheinen, max. 400 ms; `prefers-reduced-motion` schaltet sie ab.
+- **Projekte:** Auftrag, Rolle und eine poetische Zeile als «Abgang» wie bei einer Degustationsnotiz.
 
 ## Features (geplant)
 
