@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Kontakt – Thomas Häder</title>
+  <meta name="description" content="Moderation, Podcast oder Film anfragen: Thomas Häder, Chur. Antwort innert zwei Arbeitstagen.">
+  <meta name="theme-color" content="#171513">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+  <a class="skip" href="#inhalt">Zum Inhalt springen</a>
+
+  <header class="site-head on-dark band-ink">
+    <div class="wrap">
+      <a class="wordmark" href="./">Thomas <em>Häder</em></a>
+      <nav class="nav" aria-label="Hauptnavigation">
+        <a href="./#zu-hoeren">Zu hören</a>
+        <a href="ueber-mich.html">Über mich</a>
+        <a href="kontakt.html" aria-current="page">Kontakt</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="inhalt" class="contact-split">
+    <section class="band-ink contact-invite" aria-labelledby="kontakt-titel">
+      <p class="mono" style="margin:0">Kontakt</p>
+      <h1 id="kontakt-titel">Erzählen Sie mir vom <em>Anlass.</em></h1>
+      <p>Eine Moderation, ein Podcast, ein Film. Ich antworte innert zwei Arbeitstagen, auf Deutsch, Italienisch oder Englisch.</p>
+      <dl class="contact-facts">
+        <div><dt>Podcast</dt><dd><a href="https://open.spotify.com/show/7yO5dUglRkjZVX8m4LhknD" target="_blank" rel="noopener">Kadermeeting auf Spotify</a></dd></div>
+        <div><dt>Basis</dt><dd>Chur, Graubünden · unterwegs in der ganzen Schweiz</dd></div>
+      </dl>
+    </section>
+
+    <form class="form" action="kontakt.php" method="post" novalidate aria-label="Anfrage">
+      <div class="row">
+        <div class="field">
+          <label for="f-name">Name</label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="120">
+          <span class="err" id="f-name-err"></span>
+        </div>
+        <div class="field">
+          <label for="f-email">E-Mail</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="180">
+          <span class="err" id="f-email-err"></span>
+        </div>
+      </div>
+
+      <fieldset>
+        <legend>Worum geht es?</legend>
+        <div class="pills">
+          <label class="pill"><input type="radio" name="subject" value="Moderation" checked><span>Moderation</span></label>
+          <label class="pill"><input type="radio" name="subject" value="Podcast"><span>Podcast</span></label>
+          <label class="pill"><input type="radio" name="subject" value="Film / Reels"><span>Film / Reels</span></label>
+          <label class="pill"><input type="radio" name="subject" value="Etwas anderes"><span>Etwas anderes</span></label>
+        </div>
+      </fieldset>
+
+      <div class="row">
+        <div class="field">
+          <label for="f-date">Datum (falls bekannt)</label>
+          <input id="f-date" name="datum" type="date">
+        </div>
+        <div class="field">
+          <label for="f-ort">Ort</label>
+          <input id="f-ort" name="ort" type="text" maxlength="120" autocomplete="address-level2">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-body">Nachricht</label>
+        <textarea id="f-body" name="body" required maxlength="4000" placeholder="Publikum, Ablauf, was Ihnen wichtig ist …"></textarea>
+        <span class="err" id="f-body-err"></span>
+      </div>
+
+      <div class="hp" aria-hidden="true">
+        <label for="f-website">Website</label>
+        <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="form-foot">
+        <button class="btn btn-wine send" type="submit">Anfrage senden</button>
+        <small>Ihre Angaben nutze ich nur für die Antwort.</small>
+      </div>
+      <p class="form-status" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <footer class="site-foot">
+    <div class="wrap">
+      <span class="mono">© 2026 Thomas Häder</span>
+      <span class="mono">Chur · Graubünden</span>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>

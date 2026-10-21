@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Thomas Häder – Moderation, Podcast, Film · Chur</title>
-  <meta name="description" content="Thomas Häder gibt Momenten eine Stimme: Moderation, Podcast-Produktion und Film aus Chur, auf Deutsch, Italienisch und Englisch.">
-  <meta name="theme-color" content="#f2eee8">
+  <meta name="description" content="Thomas Häder gibt Momenten eine Stimme: Moderator, Podcaster und Filmer aus Chur. Gastropodcast Kadermeeting auf Spotify und YouTube.">
+  <meta name="theme-color" content="#5e1220">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
@@ -15,204 +15,141 @@
 <body>
   <a class="skip" href="#inhalt">Zum Inhalt springen</a>
 
-  <header class="site-head" id="kopf">
-    <div class="wrap">
-      <a class="wordmark" href="#inhalt" aria-label="Thomas Häder, zum Seitenanfang">Thomas <em>Häder</em></a>
-      <nav class="nav" aria-label="Hauptnavigation">
-        <a href="#arbeiten">Arbeiten</a>
-        <a href="#ueber-mich">Über mich</a>
-        <a href="#kontakt">Kontakt</a>
-      </nav>
-    </div>
+  <header class="site-head on-wine band-wine">
+      <div class="wrap">
+        <a class="wordmark" href="./">Thomas <em>Häder</em></a>
+        <nav class="nav" aria-label="Hauptnavigation">
+          <a href="#zu-hoeren">Zu hören</a>
+          <a href="ueber-mich.html">Über mich</a>
+          <a href="kontakt.html">Kontakt</a>
+        </nav>
+      </div>
   </header>
 
   <main id="inhalt">
-    <!-- Hero: Positionierungssatz + Porträt + Stimme -->
-    <section class="hero">
-      <div class="wrap">
+    <!-- Hero: Rotwein, vollflächig -->
+    <section class="band-wine hero" aria-labelledby="hero-titel">
+     <div class="wrap">
         <div class="hero-grid">
-          <div class="reveal">
-            <div class="hero-meta">
-              <span class="mono">Moderation</span>
-              <span class="mono">Podcast</span>
-              <span class="mono">Film</span>
-              <span class="mono">Chur, GR</span>
-            </div>
-            <h1>Ich gebe Momenten eine <em>Stimme.</em></h1>
-            <p class="hero-lede">Auf der Bühne, im Studio und vor der Kamera. Auf Deutsch, Italienisch und Englisch.</p>
+          <div class="hero-text">
+            <p class="mono" style="margin:0">REC ● 00:00:00:00 · Chur, Graubünden</p>
+            <h1 id="hero-titel">Ich gebe<br>Momenten<br>eine <em>Stimme.</em></h1>
+            <p class="hero-lede">Moderator, Podcaster und Filmer. Früher Butler und Sommelier. Heute führe ich Menschen mit Mikrofon und Kamera durch einen Moment.</p>
           </div>
-
-          <figure class="portrait reveal">
-            <span class="portrait-fallback" aria-hidden="true">TH</span>
-            <img src="assets/img/portrait.jpg" alt="Porträt von Thomas Häder" width="800" height="1000"
-                 onerror="this.remove()">
-            <figcaption><span class="mono">Thomas Häder</span><span class="mono">46°51′ N</span></figcaption>
+          <figure class="polaroid">
+            <div class="polaroid-frame">
+              <span class="portrait-fallback" aria-hidden="true">TH</span>
+              <img src="assets/img/portrait.jpg" alt="Porträt von Thomas Häder" width="720" height="900" onerror="this.remove()">
+            </div>
+            <figcaption>«Zuerst zuhören. Dann sprechen.»</figcaption>
           </figure>
         </div>
 
-        <!-- Stimme: startet nie automatisch, Transkript immer lesbar -->
-        <div class="voice reveal" id="stimme">
+        <!-- Stimme: startet nie automatisch -->
+        <div class="voice" id="stimme">
           <button class="play" type="button" aria-pressed="false" aria-controls="transkript">
-            <svg class="play-icon i-play" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 8l6 4-6 4z" fill="currentColor"/></svg>
-            <svg class="play-icon i-pause" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 8h1.8v8H9.5zM12.7 8h1.8v8h-1.8z" fill="currentColor"/></svg>
-            <span class="play-label">Hören, wer ich bin</span>
+            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 8l6 4-6 4z" fill="currentColor"/></svg>
+            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 8h1.8v8H9.5zM12.7 8h1.8v8h-1.8z" fill="currentColor"/></svg>
+            <span class="play-label">Hören, wer ich bin · 0:20</span>
           </button>
           <canvas class="wave" aria-hidden="true"></canvas>
-          <span class="mono voice-time" aria-live="off">0:00 / 0:20</span>
-          <p class="mono transcript-label" id="transkript-label">Transkript</p>
-          <p class="transcript" id="transkript" aria-labelledby="transkript-label">
-            <span data-t="0">Grüezi, ich bin Thomas.</span>
-            <span data-t="2.2">Lange habe ich Gäste empfangen, als Butler und als Sommelier.</span>
-            <span data-t="6.8">Heute mache ich dasselbe mit Mikrofon und Kamera.</span>
-            <span data-t="10.4">Ich moderiere, produziere Podcasts und schneide Filme.</span>
-            <span data-t="14.2">Und frage mich jedes Mal: Wie fühlt sich dieser Moment für die Menschen an, die ihn erleben?</span>
-          </p>
+          <span class="mono voice-time">0:00 / 0:20</span>
+          <details class="transcript-box">
+            <summary>Transkript</summary>
+            <p class="transcript" id="transkript">
+              <span data-t="0">Grüezi, ich bin Thomas.</span>
+              <span data-t="2.2">Lange habe ich Gäste empfangen, als Butler und als Sommelier.</span>
+              <span data-t="6.8">Heute mache ich dasselbe mit Mikrofon und Kamera.</span>
+              <span data-t="10.4">Ich moderiere, produziere Podcasts und schneide Filme.</span>
+              <span data-t="14.2">Und frage mich jedes Mal: Wie fühlt sich dieser Moment für die Menschen an, die ihn erleben?</span>
+            </p>
+          </details>
           <audio id="stimme-audio" preload="none" src="assets/audio/stimme.mp3"></audio>
         </div>
-      </div>
+     </div>
     </section>
 
-    <!-- Arbeiten: serverseitig lesbar, Filter per JS als Zusatz -->
-    <section class="section" id="arbeiten" aria-labelledby="arbeiten-titel">
-      <div class="wrap">
-        <div class="section-head reveal">
-          <h2 id="arbeiten-titel">Ausgewählte <em>Arbeiten</em></h2>
-          <div class="filters" role="group" aria-label="Arbeiten filtern" hidden></div>
-        </div>
-
-        <ol class="projects">
-          <li class="project reveal" data-cat="Film">
-            <div class="format" data-ratio="9:16">
-              <div class="format-frame"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg></div>
-              <span class="mono">9:16</span>
-            </div>
-            <div>
-              <div class="project-meta"><span class="mono">Film</span><span class="mono">Reel-Serie</span><span class="mono">Premiere Pro</span></div>
-              <h3>SWISS PGA – Turniermomente als Reels</h3>
-              <dl>
-                <div><dt>Auftrag</dt><dd>Golfturniere für Instagram und LinkedIn erzählen, schnell nach dem Schlag.</dd></div>
-                <div><dt>Umsetzung</dt><dd>Ein fester Schnitt-Look und ein Workflow, der viele Reels in kurzer Zeit trägt.</dd></div>
-              </dl>
-            </div>
-            <p class="finish"><span class="mono">Abgang</span>Ein Schlag dauert eine Sekunde. Die Stille davor erzählt den Rest.</p>
-          </li>
-
-          <li class="project reveal" data-cat="Audio">
-            <div class="format" data-ratio="1:1">
-              <div class="format-frame"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg></div>
-              <span class="mono">Podcast</span>
-            </div>
-            <div>
-              <div class="project-meta"><span class="mono">Audio</span><span class="mono">Gastropodcast</span></div>
-              <h3>Kadermeeting – Gespräche aus der Gastronomie</h3>
-              <dl>
-                <div><dt>Idee</dt><dd>Ein Podcast über die Menschen hinter dem Service, von jemandem, der selbst serviert hat.</dd></div>
-                <div><dt>Rolle</dt><dd>Konzept, Gespräch und Produktion.</dd></div>
-              </dl>
-            </div>
-            <p class="finish"><span class="mono">Abgang</span>Was in der Küche gesagt wird, bleibt selten in der Küche.</p>
-          </li>
-
-          <li class="project reveal" data-cat="Live">
-            <div class="format" data-ratio="live">
-              <div class="format-frame"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg></div>
-              <span class="mono">Bühne</span>
-            </div>
-            <div>
-              <div class="project-meta"><span class="mono">Live</span><span class="mono">Show-Konzept</span><span class="mono">The Hall, Dübendorf</span></div>
-              <h3>«Once upon a time…» – eine Märchen-Show</h3>
-              <dl>
-                <div><dt>Auftrag</dt><dd>Ein Abend, der Gäste in ein Märchen führt, von der Begrüssung bis zum letzten Bissen.</dd></div>
-                <div><dt>Rolle</dt><dd>Show-Konzept, Dramaturgie und Moderation.</dd></div>
-              </dl>
-            </div>
-            <p class="finish"><span class="mono">Abgang</span>Jedes Märchen beginnt mit jemandem, der die Tür aufhält.</p>
-          </li>
-
-          <li class="project reveal" data-cat="Audio">
-            <div class="format" data-ratio="16:9">
-              <div class="format-frame"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2" stroke="currentColor" stroke-width="1.8" fill="none"/><rect x="3" y="13" width="4" height="7" rx="1.5" fill="currentColor"/><rect x="17" y="13" width="4" height="7" rx="1.5" fill="currentColor"/></svg></div>
-              <span class="mono">Studio</span>
-            </div>
-            <div>
-              <div class="project-meta"><span class="mono">Audio</span><span class="mono">Podcast-Studio</span><span class="mono">Zürich</span></div>
-              <h3>Podcast Zürich – Gäste am Mikrofon</h3>
-              <dl>
-                <div><dt>Aufgabe</dt><dd>Aufnahmen technisch führen und Gäste so betreuen, dass sie vergessen, dass ein Mikrofon läuft.</dd></div>
-                <div><dt>Rolle</dt><dd>Podcast Operator: Ton, Regie und Gastbetreuung.</dd></div>
-              </dl>
-            </div>
-            <p class="finish"><span class="mono">Abgang</span>Die beste Technik ist die, an die sich danach niemand erinnert.</p>
-          </li>
-        </ol>
-        <p class="empty" hidden>In dieser Kategorie gibt es noch keine Arbeiten.</p>
+  <!-- Zu hören -->
+  <section class="section" id="zu-hoeren" aria-labelledby="hoeren-titel">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2 id="hoeren-titel">Zu <em>hören</em></h2>
+        <p class="mono" style="margin:0">Podcasts · Spotify · YouTube</p>
       </div>
-    </section>
 
-    <!-- Über mich -->
-    <section class="section" id="ueber-mich" aria-labelledby="ueber-titel">
-      <div class="wrap about-grid">
-        <div class="reveal">
-          <h2 id="ueber-titel">Über <em>mich</em></h2>
+      <article class="show reveal">
+        <div class="cover" aria-hidden="true">
+          <span class="mono">Gastropodcast · seit 2023</span>
+          <span class="cover-title">Kader&shy;meeting</span>
+          <span class="cover-sub">mit Simon und Thomas</span>
         </div>
-        <div class="about-text reveal">
-          <p>Bevor ich Mikrofone in die Hand nahm, habe ich Gläser gehalten.</p>
-          <p>Als Butler auf Kreuzfahrtschiffen und als Sommelier in Fünf-Sterne-Häusern habe ich gelernt, einen Raum zu lesen, bevor jemand etwas sagt. Genau das mache ich heute als Moderator, im Podcast-Studio und am Schnittplatz: Ich führe Menschen durch einen Moment und sorge dafür, dass er bei ihnen ankommt.</p>
-          <p>Ich lebe in Chur und studiere Multimedia Production mit Schwerpunkt Live Communication an der FH Graubünden.</p>
-          <ul class="facts">
-            <li><span class="mono">Sprachen</span><span>Deutsch, Italienisch, Englisch</span></li>
-            <li><span class="mono">Ausbildung</span><span>Sommelier (2016) · Multimedia Production, FHGR (2027)</span></li>
-            <li><span class="mono">Heute</span><span>Podcast Operator bei Podcast Zürich</span></li>
-            <li><span class="mono">Basis</span><span>Chur, Graubünden · unterwegs in der ganzen Schweiz</span></li>
-          </ul>
+        <div class="show-body">
+          <div class="show-meta"><span class="mono">Wöchentlich</span><span class="mono">Über 70 Folgen</span><span class="mono">Mit Simon Trittibach</span></div>
+          <h3>Kadermeeting – Geschichten aus Küche, Service und Bar, erzählt von zwei, die selbst serviert haben.</h3>
+          <ol class="episodes" aria-label="Neueste Folgen">
+            <li><span class="nr">#071</span><span class="title">Future Trends</span><span class="date">13.02.2026</span></li>
+            <li><span class="nr">#070</span><span class="title">Alles Banane</span><span class="date">06.02.2026</span></li>
+            <li><span class="nr">#069</span><span class="title">Mit Martisa Friberg</span><span class="date">23.01.2026</span></li>
+          </ol>
+          <div class="btn-row">
+            <a class="btn btn-wine" href="https://open.spotify.com/show/7yO5dUglRkjZVX8m4LhknD" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M7 10c3.5-1 7-.7 10 1M7.8 13c2.8-.7 5.6-.4 8 .9M8.6 15.8c2.1-.5 4.2-.3 6 .7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              Auf Spotify hören
+            </a>
+            <!-- TODO: Link zum YouTube-Kanal eintragen -->
+            <a class="btn btn-line" href="https://www.youtube.com/results?search_query=Kadermeeting+mit+Simon+und+Thomas" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5.5" width="19" height="13" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 9.2l5 2.8-5 2.8z" fill="currentColor"/></svg>
+              Auf YouTube ansehen
+            </a>
+            <a class="btn btn-soft" href="https://podcasts.apple.com/us/podcast/id1710879349" target="_blank" rel="noopener">Apple Podcasts</a>
+          </div>
         </div>
+      </article>
+
+      <article class="show reveal">
+        <div class="cover-wave" aria-hidden="true">
+          <i style="height:38px"></i><i style="height:52px"></i><i style="height:30px"></i><i style="height:60px"></i><i style="height:44px"></i><i style="height:22px"></i><i style="height:48px"></i><i style="height:58px"></i><i style="height:34px"></i><i style="height:26px"></i><i style="height:50px"></i><i style="height:40px"></i><i style="height:56px"></i><i style="height:28px"></i><i style="height:46px"></i><i style="height:36px"></i><i style="height:54px"></i><i style="height:24px"></i><i style="height:42px"></i><i style="height:32px"></i>
+        </div>
+        <div class="show-body">
+          <div class="show-meta"><span class="mono">Podcast-Studio</span><span class="mono">Zürich</span><span class="mono">Podcast Operator</span></div>
+          <h3>Podcast Zürich – ich führe Aufnahmen so, dass Gäste das Mikrofon vergessen.</h3>
+          <p>Ton, Regie und Gastbetreuung für Produktionen im Studio.</p>
+          <div class="btn-row">
+            <a class="btn btn-line" href="https://podcastzurich.com" target="_blank" rel="noopener">Zum Studio</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Zu sehen -->
+  <section class="section" style="padding-top:0" aria-labelledby="sehen-titel">
+    <div class="wrap">
+      <h2 id="sehen-titel" class="reveal">Zu <em>sehen</em></h2>
+      <div class="works">
+        <article class="work reveal">
+          <div class="work-visual reels" aria-hidden="true"><i></i><i></i><i></i></div>
+          <span class="mono">Film · Reels 9:16</span>
+          <h3 class="work-title">SWISS PGA – Turniermomente als Reels</h3>
+          <span class="work-finish">Ein Schlag dauert eine Sekunde. Die Stille davor erzählt den Rest.</span>
+        </article>
+        <article class="work reveal">
+          <div class="work-visual stage" aria-hidden="true"><span>Once upon a time…</span></div>
+          <span class="mono">Live · The Hall, Dübendorf</span>
+          <h3 class="work-title">Eine Märchen-Show, von der Begrüssung bis zum letzten Bissen</h3>
+          <span class="work-finish">Jedes Märchen beginnt mit jemandem, der die Tür aufhält.</span>
+        </article>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Kontakt -->
-    <section class="section contact" id="kontakt" aria-labelledby="kontakt-titel">
-      <div class="wrap contact-grid">
-        <div class="reveal">
-          <h2 id="kontakt-titel">Projekt <em>anfragen</em></h2>
-          <p class="contact-lede">Eine Moderation, ein Podcast, ein Film? Erzählen Sie mir vom Anlass. Ich antworte innert zwei Arbeitstagen.</p>
-        </div>
+  <section class="band-ink closing" aria-label="Kontakt aufnehmen">
+    <div class="wrap">
+      <p>Ein Anlass, ein Podcast,<br><em>ein Film?</em></p>
+      <a class="btn btn-paper" href="kontakt.html">Projekt anfragen</a>
+    </div>
+  </section>
 
-        <form class="form reveal" action="kontakt.php" method="post" novalidate>
-          <div class="row">
-            <div class="field">
-              <label for="f-name">Name</label>
-              <input id="f-name" name="name" type="text" autocomplete="name" required maxlength="120">
-              <span class="err" id="f-name-err"></span>
-            </div>
-            <div class="field">
-              <label for="f-email">E-Mail</label>
-              <input id="f-email" name="email" type="email" autocomplete="email" required maxlength="180">
-              <span class="err" id="f-email-err"></span>
-            </div>
-          </div>
-          <div class="field">
-            <label for="f-subject">Worum geht es?</label>
-            <select id="f-subject" name="subject">
-              <option>Moderation</option>
-              <option>Podcast</option>
-              <option>Film / Reels</option>
-              <option>Etwas anderes</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="f-body">Nachricht</label>
-            <textarea id="f-body" name="body" required maxlength="4000" placeholder="Anlass, Datum, Ort, Publikum …"></textarea>
-            <span class="err" id="f-body-err"></span>
-          </div>
-          <div class="hp" aria-hidden="true">
-            <label for="f-website">Website</label>
-            <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
-          </div>
-          <button class="send" type="submit">Anfrage senden</button>
-          <p class="form-status" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </section>
   </main>
 
   <footer class="site-foot">

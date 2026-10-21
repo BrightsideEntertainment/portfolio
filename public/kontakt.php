@@ -44,6 +44,20 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($email) > 180) {
 if (mb_strlen($body) < 10 || mb_strlen($body) > 4000) {
     respond(false, 'Die Nachricht ist zu kurz oder zu lang.', $wantsJson, 422);
 }
+// Optionale Angaben zum Anlass vor die Nachricht stellen
+$datum = trim((string)($_POST['datum'] ?? ''));
+$ort   = mb_substr(trim((string)($_POST['ort'] ?? '')), 0, 120);
+$extra = [];
+if ($datum !== '' && preg_match('/^\d{4}-\d{2}-\d{2}$/', $datum)) {
+    $extra[] = 'Datum: ' . $datum;
+}
+if ($ort !== '') {
+    $extra[] = 'Ort: ' . $ort;
+}
+if ($extra) {
+    $body = implode("\n", $extra) . "\n\n" . $body;
+}
+
 $allowed = ['Moderation', 'Podcast', 'Film / Reels', 'Etwas anderes'];
 if (!in_array($subject, $allowed, true)) {
     $subject = 'Etwas anderes';

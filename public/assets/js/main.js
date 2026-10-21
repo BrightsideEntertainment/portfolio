@@ -5,10 +5,12 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- Kopfzeile: Linie erst nach dem Scrollen ---------- */
-  const head = document.getElementById('kopf');
-  const onScroll = () => head.classList.toggle('is-scrolled', window.scrollY > 8);
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  const head = document.querySelector('.site-head');
+  if (head) {
+    const onScroll = () => head.classList.toggle('is-scrolled', window.scrollY > 8);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
 
   /* ---------- Einblenden: nur Elemente unterhalb des Sichtbereichs, nur einmal ---------- */
   if (!reduceMotion && 'IntersectionObserver' in window) {
@@ -124,8 +126,6 @@
       } catch (_) { /* keine Aufnahme vorhanden: Ersatz-Wellenform bleibt */ }
     }
 
-    function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
-
     function draw(progress) {
       const dpr = window.devicePixelRatio || 1;
       const w = canvas.clientWidth, h = canvas.clientHeight;
@@ -134,7 +134,7 @@
       ctx.clearRect(0, 0, w, h);
       const gap = 2;
       const bw = Math.max(1, (w - gap * (BARS - 1)) / BARS);
-      const played = css('--wine'), rest = css('--line');
+      const played = '#f1ece4', rest = 'rgba(241, 236, 228, 0.35)';
       peaks.forEach((p, i) => {
         const x = i * (bw + gap);
         const bh = Math.max(2, p * h);
@@ -166,7 +166,9 @@
       raf = requestAnimationFrame(tick);
     }
 
+    const box = voice.querySelector('.transcript-box');
     function start() {
+      if (box) box.open = true;
       playing = true;
       btn.setAttribute('aria-pressed', 'true');
       cancelAnimationFrame(raf);
@@ -208,7 +210,6 @@
     });
 
     window.addEventListener('resize', () => draw(current() / duration));
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => draw(current() / duration));
     draw(0); setTime(0);
     // Echte Wellenform erst laden, wenn die Stimme sichtbar wird
     if ('IntersectionObserver' in window) {
