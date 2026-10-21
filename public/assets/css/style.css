@@ -1,0 +1,30 @@
+:root {
+  --bg: #0f0f10;
+  --text: #f2efe9;
+  --muted: #9a958c;
+  --accent: #e8b44a;
+  --font: "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  min-height: 100vh;
+}
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 8vw;
+  gap: 1rem;
+}
+
+.eyebrow { color: var(--accent); letter-spacing: .15em; text-transform: uppercase; font-size: .8rem; }
+h1 { font-size: clamp(3rem, 10vw, 8rem); line-height: .95; font-weight: 700; }
+.lead { font-size: clamp(1.1rem, 2.5vw, 1.6rem); color: var(--muted); }
+.status { margin-top: 2rem; font-size: .9rem; color: var(--muted); }
