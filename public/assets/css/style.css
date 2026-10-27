@@ -186,6 +186,26 @@ em { font-style: italic; }
 .cover .mono { color: var(--line); font-size: .75rem; }
 .cover-title { font-family: var(--f-display); font-size: clamp(2.75rem, 5vw, 4rem); line-height: .9; hyphens: manual; }
 .cover-sub { font-family: var(--f-display); font-style: italic; font-size: 1.375rem; color: var(--rose); }
+/* Drei Gänge: drei Teller auf Rotwein */
+.cover-plates { background: var(--wine); }
+.cover-plates .mono { color: var(--on-wine); }
+.plates { display: flex; gap: 10px; }
+.plates i {
+  width: 30%; aspect-ratio: 1; border-radius: 50%;
+  border: 1.5px solid var(--paper); box-shadow: inset 0 0 0 7px var(--wine), inset 0 0 0 8.5px rgba(241, 236, 228, .5);
+  transition: transform .5s var(--ease);
+}
+.show:hover .plates i:nth-child(1) { transform: translateY(-4px); }
+.show:hover .plates i:nth-child(2) { transform: translateY(-8px); }
+.show:hover .plates i:nth-child(3) { transform: translateY(-12px); }
+.cover-plates .cover-title { font-size: clamp(2.25rem, 4vw, 3rem); }
+
+/* Companeros: Weg auf Leinen */
+.cover-path { background: var(--paper-2); color: var(--ink); }
+.cover-path .mono { color: var(--muted); }
+.cover-path .path { width: 100%; height: 70px; color: var(--wine); }
+.cover-path .cover-title { color: var(--ink); }
+
 .cover-wave {
   aspect-ratio: 16 / 9; max-width: 100%; border: 1.5px solid var(--ink);
   display: flex; align-items: center; justify-content: center; gap: 4px; padding: 0 2.25rem;
