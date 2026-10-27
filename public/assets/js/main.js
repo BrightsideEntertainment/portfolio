@@ -209,6 +209,52 @@
     }
   }
 
+  /* ---------- Fotos: Lightbox mit Tastatur und Wischen ---------- */
+  const lb = document.querySelector('.lightbox');
+  if (lb && typeof lb.showModal === 'function') {
+    const items = [...document.querySelectorAll('.photo-open')];
+    const big = lb.querySelector('img');
+    const cap = lb.querySelector('figcaption');
+    const count = lb.querySelector('.lb-count');
+    let idx = 0;
+    const vt = (fn) => (!reduceMotion && document.startViewTransition ? document.startViewTransition(fn) : fn());
+    const show = (i) => {
+      idx = (i + items.length) % items.length;
+      const img = items[idx].querySelector('img');
+      big.src = img.dataset.full || img.currentSrc || img.src;
+      big.alt = img.alt;
+      cap.textContent = items[idx].parentElement.querySelector('.mono')?.textContent || '';
+      count.textContent = `${String(idx + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
+    };
+    items.forEach((btn, i) => btn.addEventListener('click', () => {
+      const img = btn.querySelector('img');
+      img.style.viewTransitionName = 'foto';           // Bild «fliegt» aus dem Raster in die Grossansicht
+      vt(() => { img.style.viewTransitionName = ''; show(i); lb.showModal(); });
+    }));
+    const close = () => {
+      const img = items[idx].querySelector('img');
+      vt(() => { lb.close(); img.style.viewTransitionName = 'foto'; });
+      setTimeout(() => { img.style.viewTransitionName = ''; items[idx].focus(); }, 450);
+    };
+    lb.querySelector('.lb-close').addEventListener('click', close);
+    lb.querySelector('.lb-prev').addEventListener('click', () => show(idx - 1));
+    lb.querySelector('.lb-next').addEventListener('click', () => show(idx + 1));
+    lb.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
+    lb.addEventListener('click', (e) => { if (e.target === lb) close(); });
+    lb.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') show(idx + 1);
+      if (e.key === 'ArrowLeft') show(idx - 1);
+    });
+    let x0 = null;
+    lb.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', (e) => {
+      if (x0 === null) return;
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1));
+      x0 = null;
+    });
+  }
+
   /* ---------- Kontaktformular: prüfen und ohne Neuladen senden ---------- */
   const form = document.querySelector('.form');
   if (form) {
