@@ -13,11 +13,14 @@ Eine persönliche Portfolio-Website für meine Arbeit als Moderator, Podcast-Pro
 
 Ich habe lange als Butler und Sommelier gearbeitet, heute moderiere und produziere ich. Der rote Faden ist das Empfangen und Führen von Menschen. Die Seite übersetzt das so:
 
-- **Stimme statt Effekt:** Ein eigener Audio-Player (Web Audio API) zeigt die Wellenform aus der echten Aufnahme und liest das Transkript synchron mit. Nichts startet automatisch.
-- **Typografie:** Serif mit Kursive für die poetische Seite, Mono für Studio-Metadaten (Formate, Timecodes).
-- **Farbe:** heller Leinengrund, Tinte, ein einziger Akzent in Rotwein.
-- **Bewegung:** nur Einblenden beim ersten Erscheinen, max. 400 ms; `prefers-reduced-motion` schaltet sie ab.
-- **Projekte:** Auftrag, Rolle und eine poetische Zeile als «Abgang» wie bei einer Degustationsnotiz.
+- **Die Stimme schreibt den Satz (Signatur):** Im Hero liest meine Stimme «Ich gebe Momenten eine Stimme.» vor. Jedes Wort wird beim Sprechen dunkel, das aktuelle steht kursiv in Messing. Ein Klick auf ein Wort springt an diese Stelle. Technik: GSAP SplitText zerlegt den Satz, `gsap.ticker` koppelt ihn an `audio.currentTime`, wortgenaue Zeitmarken kommen aus `assets/audio/stimme.vtt` (WebVTT, mit WhisperX erzeugt). Ohne Aufnahme läuft der Satz im selben Takt zum Mitlesen.
+- **Arbeiten:** Karten mit Standbild; bei Hover (Handy: wenn die Karte im Bild ist) läuft ein stummer Clip (`data-clip`).
+- **Seitenwechsel:** native Cross-Document View Transitions, ohne Bibliothek.
+- **Typografie:** Instrument Serif mit Kursive für die Stimme, Geist für Text, Geist Mono für Timecodes. Alle Schriften lokal (nDSG).
+- **Farbe:** Leinen `#f3efe9`, Tinte `#151311`, Akzent Messing `#8a5a1c` (Kontrast 5:1), Champagner `#e2c290` auf dunklem Grund.
+- **Ruhig für alle:** `prefers-reduced-motion` schaltet Bewegung ab, das Wort-Highlight bleibt als Farbe. Player komplett per Tastatur (Button, Schieberegler), Screenreader lesen den ganzen Satz (`aria`-Option von SplitText).
+
+Design in Figma: Seite «Startseite» (Desktop 1440, Handy 390, Interaktionen & Regeln).
 
 ## Features (geplant)
 
@@ -32,21 +35,22 @@ Ich habe lange als Butler und Sommelier gearbeitet, heute moderiere und produzie
 
 | Bereich   | Technologie                         |
 |-----------|-------------------------------------|
-| Frontend  | HTML, CSS, JavaScript (fetch API)   |
+| Frontend  | HTML, CSS, JavaScript (fetch API), GSAP 3.13 + SplitText (lokal) |
 | Backend   | PHP 8 (PDO, Sessions)               |
 | Datenbank | MySQL/MariaDB (Hostpoint)           |
 | API       | oEmbed (YouTube / Vimeo / Spotify)  |
-| Deploy    | GitHub Actions → FTPS → Hostpoint   |
+| Deploy    | GitHub Actions → FTPS → Hostpoint (main = live, staging = /staging/) |
 
 ## Struktur
 
 ```
-.github/workflows/deploy.yml   Automatischer Deploy bei Push auf main
+.github/workflows/deploy.yml   Deploy der Live-Seite bei Push auf main
+.github/workflows/deploy-staging.yml  Vorschau unter /staging/ bei Push auf staging
 db/schema.sql                  Datenbankschema
 docs/                          Projektplan, Screenshots, Reflexion
 public/                        Alles, was auf den Server kommt
   ├─ index.html
-  ├─ assets/ (css, js, img)
+  ├─ assets/ (css, js, img, fonts, lib, audio)
   ├─ includes/                 config.example.php, db.php
   ├─ admin/                    Geschützter Admin-Bereich
   ├─ api/                      JSON-Endpunkte für JS
@@ -60,7 +64,7 @@ public/                        Alles, was auf den Server kommt
 3. `db/schema.sql` in phpMyAdmin (Hostpoint) importieren
 4. `config.php` einmalig per FTP hochladen (wird vom Deploy ausgeschlossen)
 5. GitHub Secrets setzen: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`, `FTP_SERVER_DIR`
-6. Push auf `main` → Seite wird automatisch deployed
+6. Arbeiten auf `staging` → Vorschau unter `/staging/`; Merge auf `main` → Live-Seite
 
 ## Screenshots
 

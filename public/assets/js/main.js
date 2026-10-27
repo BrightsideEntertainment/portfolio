@@ -1,5 +1,8 @@
 /* Portfolio Thomas Häder – Interaktion
-   Alles funktioniert auch ohne JavaScript; dieses Skript ergänzt nur. */
+   Alles funktioniert auch ohne JavaScript; dieses Skript ergänzt nur.
+   1. Die Stimme schreibt den Satz (GSAP SplitText + gsap.ticker an audio.currentTime)
+   2. Arbeiten: stummer Clip bei Hover (Handy: wenn die Karte im Bild ist)
+   3. Seitenwechsel: native View Transitions (nur CSS)                        */
 (() => {
   'use strict';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -18,204 +21,192 @@
       entries.forEach((e) => {
         if (e.isIntersecting) { e.target.classList.remove('pending'); io.unobserve(e.target); }
       });
-    }, { rootMargin: '0px 0px -8% 0px' });
-    document.querySelectorAll('.reveal').forEach((el) => {
+    }, { rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('.reveal').forEach((el, i) => {
       if (el.getBoundingClientRect().top > window.innerHeight) {
         el.classList.add('pending');
+        el.style.transitionDelay = `${(i % 3) * 70}ms`;
         io.observe(el);
       }
     });
-    // Sicherheitsnetz bei sehr schnellem Scrollen: alles oberhalb des unteren Rands zeigen
-    const sweep = () => {
-      document.querySelectorAll('.reveal.pending').forEach((el) => {
-        if (el.getBoundingClientRect().top < window.innerHeight) { el.classList.remove('pending'); io.unobserve(el); }
-      });
-    };
-    window.addEventListener('scroll', sweep, { passive: true });
-    window.addEventListener('resize', sweep);
   }
 
-  /* ---------- Filter: Kategorien aus den Projekten selbst ableiten ---------- */
-  const list = document.querySelector('.projects');
-  const filterBox = document.querySelector('.filters');
-  const empty = document.querySelector('.empty');
-  if (list && filterBox) {
-    const items = [...list.querySelectorAll('.project')];
-    const counts = items.reduce((acc, li) => {
-      const c = li.dataset.cat; acc[c] = (acc[c] || 0) + 1; return acc;
-    }, {});
-    const cats = ['Alle', ...Object.keys(counts)];
-    cats.forEach((cat, i) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'chip';
-      b.dataset.cat = cat;
-      b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
-      const n = cat === 'Alle' ? items.length : counts[cat];
-      b.innerHTML = `${cat}<span class="count">${n}</span>`;
-      filterBox.appendChild(b);
-    });
-    filterBox.hidden = false;
-    filterBox.addEventListener('click', (ev) => {
-      const btn = ev.target.closest('.chip');
-      if (!btn) return;
-      const cat = btn.dataset.cat;
-      filterBox.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String(c === btn)));
-      let shown = 0;
-      items.forEach((li) => {
-        const on = cat === 'Alle' || li.dataset.cat === cat;
-        li.hidden = !on;
-        if (on) { shown++; li.classList.remove('pending'); }
-      });
-      empty.hidden = shown > 0;
-    });
-  }
+  /* ---------- 1. Die Stimme schreibt den Satz ---------- */
+  const hero = document.getElementById('stimme');
+  if (hero) initVoice(hero);
 
-  /* ---------- Stimme: Wellenform + Transkript im Takt ---------- */
-  const voice = document.getElementById('stimme');
-  if (voice) {
-    const btn = voice.querySelector('.play');
-    const label = voice.querySelector('.play-label');
-    const canvas = voice.querySelector('.wave');
-    const timeEl = voice.querySelector('.voice-time');
-    const audio = document.getElementById('stimme-audio');
-    const lines = [...voice.querySelectorAll('.transcript span')];
-    const ctx = canvas.getContext('2d');
-    const BARS = 96;
-    let duration = 20;
-    let peaks = fallbackPeaks(BARS);
+  function initVoice(root) {
+    const audio = root.querySelector('#stimme-audio');
+    const btn = root.querySelector('.play');
+    const seek = root.querySelector('.seek');
+    const timeEl = root.querySelector('.voice-time');
+    const labelEl = root.querySelector('.voice-label');
+    const hasGsap = !!(window.gsap && window.SplitText);
+
+    let words = [];            // [{el, t, end}]
+    let duration = 10;
+    let readAlong = false;     // ohne Aufnahme: der Satz läuft im selben Takt mit
+    let clock = 0;             // Zeit im Mitlese-Modus
     let playing = false;
-    let readAlong = false;   // Mitlesen ohne Aufnahme, falls noch keine Datei existiert
-    let readStart = 0;
-    let readOffset = 0;
-    let raf = 0;
+    let endTimer = 0;
 
-    // Gleichmässige Ersatz-Wellenform, bis die echte Aufnahme geladen ist
-    function fallbackPeaks(n) {
-      const out = [];
-      for (let i = 0; i < n; i++) {
-        const v = Math.abs(Math.sin(i * 0.37) * 0.55 + Math.sin(i * 0.11 + 1) * 0.35 + Math.sin(i * 1.7) * 0.1);
-        out.push(0.18 + v * 0.75);
+    const fmt = (s) => { s = Math.max(0, Math.round(s)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; };
+
+    function noRecording() {
+      if (readAlong) return;
+      readAlong = true;
+      labelEl.textContent = 'Mitlesen · Aufnahme folgt';
+    }
+    // Die Datei fehlt (noch)? Dann Mitlese-Modus.
+    audio.addEventListener('error', noRecording);
+    if (audio.error || audio.networkState === 3) noRecording();
+    audio.addEventListener('loadedmetadata', () => {
+      if (isFinite(audio.duration) && audio.duration > 0) { duration = audio.duration; seek.max = duration.toFixed(1); render(0); }
+    });
+    audio.addEventListener('ended', finish);
+
+    function now() { return readAlong ? clock : audio.currentTime; }
+
+    function render(t) {
+      for (const w of words) {
+        const done = t >= w.end;
+        const cur = t >= w.t && !done;
+        if (w.done !== done) { w.el.classList.toggle('is-done', done); w.done = done; }
+        if (w.cur !== cur) { w.el.classList.toggle('is-now', cur); w.cur = cur; }
       }
-      return out;
+      seek.value = t;
+      seek.style.setProperty('--p', `${(t / duration) * 100}%`);
+      seek.setAttribute('aria-valuetext', `${fmt(t)} von ${fmt(duration)}`);
+      timeEl.textContent = `${fmt(t)} / ${fmt(duration)}`;
     }
 
-    // Echte Spitzenwerte aus der Audiodatei berechnen (Web Audio API)
-    async function loadRealPeaks() {
-      try {
-        const res = await fetch(audio.getAttribute('src'));
-        if (!res.ok) return;
-        const buf = await res.arrayBuffer();
-        const AC = window.AudioContext || window.webkitAudioContext;
-        const ac = new AC();
-        const decoded = await ac.decodeAudioData(buf);
-        const data = decoded.getChannelData(0);
-        const block = Math.floor(data.length / BARS);
-        const raw = [];
-        for (let i = 0; i < BARS; i++) {
-          let sum = 0;
-          for (let j = 0; j < block; j++) sum += Math.abs(data[i * block + j]);
-          raw.push(sum / block);
-        }
-        const max = Math.max(...raw) || 1;
-        peaks = raw.map((v) => 0.08 + (v / max) * 0.92);
-        duration = decoded.duration;
-        ac.close && ac.close();
-        draw(0);
-        setTime(0);
-      } catch (_) { /* keine Aufnahme vorhanden: Ersatz-Wellenform bleibt */ }
+    function tick(_, deltaMs) {
+      if (!playing) return;
+      if (readAlong) clock = Math.min(duration, clock + deltaMs / 1000);
+      const t = now();
+      render(t);
+      if (readAlong && t >= duration) finish();
     }
 
-    function draw(progress) {
-      const dpr = window.devicePixelRatio || 1;
-      const w = canvas.clientWidth, h = canvas.clientHeight;
-      if (canvas.width !== Math.round(w * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
-      const gap = 2;
-      const bw = Math.max(1, (w - gap * (BARS - 1)) / BARS);
-      const played = '#f1ece4', rest = 'rgba(241, 236, 228, 0.35)';
-      peaks.forEach((p, i) => {
-        const x = i * (bw + gap);
-        const bh = Math.max(2, p * h);
-        ctx.fillStyle = (i / BARS) < progress ? played : rest;
-        ctx.fillRect(x, (h - bh) / 2, bw, bh);
-      });
-    }
-
-    function fmt(s) { s = Math.max(0, Math.floor(s)); return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; }
-    function setTime(t) { timeEl.textContent = `${fmt(t)} / ${fmt(duration)}`; }
-
-    function current() {
-      return readAlong ? readOffset + (performance.now() - readStart) / 1000 : audio.currentTime;
-    }
-
-    function highlight(t) {
-      lines.forEach((l, i) => {
-        const start = parseFloat(l.dataset.t);
-        const next = lines[i + 1] ? parseFloat(lines[i + 1].dataset.t) : duration;
-        l.classList.toggle('is-now', t >= start && t < next);
-        l.classList.toggle('is-done', t >= next);
-      });
-    }
-
-    function tick() {
-      const t = Math.min(current(), duration);
-      draw(t / duration); setTime(t); highlight(t);
-      if (t >= duration) { stop(true); return; }
-      raf = requestAnimationFrame(tick);
-    }
-
-    const box = voice.querySelector('.transcript-box');
-    function start() {
-      if (box) box.open = true;
-      playing = true;
+    async function play() {
+      clearTimeout(endTimer);
+      root.classList.add('is-voiced', 'is-playing');
       btn.setAttribute('aria-pressed', 'true');
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(tick);
-    }
-    function stop(ended) {
-      playing = false;
-      btn.setAttribute('aria-pressed', 'false');
-      cancelAnimationFrame(raf);
-      if (readAlong) readOffset = ended ? 0 : current();
-      if (ended) { if (!readAlong) audio.currentTime = 0; draw(1); highlight(duration); }
-    }
-
-    btn.addEventListener('click', async () => {
-      if (playing) { readAlong ? stop(false) : audio.pause(); return; }
-      if (readAlong) { readStart = performance.now(); start(); return; }
-      try {
-        await audio.play();
-      } catch (_) {
-        // Noch keine Aufnahme: Transkript im gleichen Takt mitlesen
-        readAlong = true;
-        label.textContent = 'Mitlesen (Aufnahme folgt)';
-        readStart = performance.now(); readOffset = 0;
-        start();
+      btn.setAttribute('aria-label', 'Stimme anhalten');
+      if (!readAlong) {
+        try { await audio.play(); } catch (_) { noRecording(); }
       }
-    });
-    audio.addEventListener('play', start);
-    audio.addEventListener('pause', () => stop(false));
-    audio.addEventListener('ended', () => stop(true));
-    audio.addEventListener('loadedmetadata', () => { if (isFinite(audio.duration)) duration = audio.duration; });
+      if (readAlong && clock >= duration) clock = 0;
+      playing = true;
+    }
+    function pause() {
+      playing = false;
+      if (!readAlong) audio.pause();
+      root.classList.remove('is-playing');
+      btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-label', 'Stimme abspielen');
+    }
+    function finish() {
+      pause();
+      render(duration);
+      // Kurz stehen lassen, dann zurück in den Ruhezustand
+      endTimer = setTimeout(() => {
+        root.classList.remove('is-voiced');
+        clock = 0;
+        if (!readAlong) audio.currentTime = 0;
+        render(0);
+      }, 1400);
+    }
+    function seekTo(t, autoplay) {
+      t = Math.max(0, Math.min(duration, t));
+      clearTimeout(endTimer);
+      root.classList.add('is-voiced');
+      if (readAlong) clock = t; else if (audio.readyState > 0) audio.currentTime = t;
+      render(t);
+      if (autoplay && !playing) play();
+    }
 
-    // In der Wellenform springen
-    canvas.addEventListener('click', (ev) => {
-      const r = canvas.getBoundingClientRect();
-      const t = ((ev.clientX - r.left) / r.width) * duration;
-      if (readAlong) { readOffset = t; readStart = performance.now(); }
-      else if (audio.readyState > 0) audio.currentTime = t;
-      draw(t / duration); setTime(t); highlight(t);
+    btn.addEventListener('click', () => (playing ? pause() : play()));
+    seek.addEventListener('input', () => seekTo(parseFloat(seek.value), false));
+
+    // Wörter erst zerlegen, wenn die Schrift geladen ist (sonst falsche Breiten)
+    const ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    ready.then(async () => {
+      if (!hasGsap) { render(0); return; }
+      gsap.registerPlugin(SplitText);
+      const groups = [...root.querySelectorAll('[data-times]')];
+      groups.forEach((el) => {
+        const times = el.dataset.times.trim().split(/\s+/).map(Number);
+        // aria: "auto" – Screenreader lesen den ganzen Satz, nicht einzelne Wörter
+        const split = SplitText.create(el, { type: 'words', wordsClass: 'w', aria: 'auto' });
+        split.words.forEach((w, i) => words.push({ el: w, t: times[i] ?? 0 }));
+        if (el.matches('h1') && !reduceMotion) {
+          gsap.from(split.words, { yPercent: 35, opacity: 0, duration: 1.1, ease: 'power3.out', stagger: 0.07, delay: 0.1 });
+        }
+      });
+
+      // Wortgenaue Zeitmarken aus der WebVTT-Datei (z. B. mit WhisperX erzeugt) übernehmen
+      try {
+        const res = await fetch('assets/audio/stimme.vtt');
+        if (res.ok) {
+          const cues = parseVtt(await res.text());
+          if (cues.length === words.length) cues.forEach((c, i) => { words[i].t = c.start; words[i].stop = c.end; });
+        }
+      } catch (_) { /* Zeitmarken aus dem HTML bleiben */ }
+
+      words.sort((a, b) => a.t - b.t);
+      words.forEach((w, i) => { w.end = words[i + 1] ? words[i + 1].t : (w.stop || w.t + 0.9); });
+
+      // Klick auf ein Wort springt dorthin
+      words.forEach((w) => w.el.addEventListener('click', () => seekTo(w.t, true)));
+      gsap.ticker.add(tick);
+      render(0);
     });
 
-    window.addEventListener('resize', () => draw(current() / duration));
-    draw(0); setTime(0);
-    // Echte Wellenform erst laden, wenn die Stimme sichtbar wird
-    if ('IntersectionObserver' in window) {
-      const vo = new IntersectionObserver((e) => { if (e[0].isIntersecting) { loadRealPeaks(); vo.disconnect(); } });
-      vo.observe(voice);
-    } else { loadRealPeaks(); }
+    // Fallback ohne GSAP: Fortschritt trotzdem anzeigen
+    if (!hasGsap) {
+      const loop = (ts) => { tick(null, 16); requestAnimationFrame(loop); };
+      requestAnimationFrame(loop);
+    }
+  }
+
+  function parseVtt(text) {
+    const toSec = (s) => s.split(':').reverse().reduce((acc, part, i) => acc + parseFloat(part.replace(',', '.')) * 60 ** i, 0);
+    const cues = [];
+    const re = /([\d:.,]+)\s+-->\s+([\d:.,]+)[^\n]*\n([^\n]+)/g;
+    let m;
+    while ((m = re.exec(text))) cues.push({ start: toSec(m[1]), end: toSec(m[2]), text: m[3].trim() });
+    return cues;
+  }
+
+  /* ---------- 2. Arbeiten: stummer Clip statt Standbild ---------- */
+  // Eine Karte mit data-clip="assets/clips/name.mp4" zeigt bei Hover einen stummen Clip.
+  if (!reduceMotion) {
+    const cards = [...document.querySelectorAll('.work[data-clip]')];
+    const canHover = window.matchMedia('(hover: hover)').matches;
+    const ensureVideo = (card) => {
+      let v = card.querySelector('video');
+      if (v) return v;
+      v = document.createElement('video');
+      Object.assign(v, { muted: true, loop: true, playsInline: true, preload: 'none', src: card.dataset.clip });
+      v.setAttribute('aria-hidden', 'true');
+      v.addEventListener('timeupdate', () => card.querySelector('.work-media').style.setProperty('--clip', `${(v.currentTime / v.duration) * 100 || 0}%`));
+      card.querySelector('.work-media').prepend(v);
+      return v;
+    };
+    const on = (card) => { const v = ensureVideo(card); v.play().then(() => card.classList.add('is-clip')).catch(() => {}); };
+    const off = (card) => { const v = card.querySelector('video'); if (v) v.pause(); card.classList.remove('is-clip'); };
+    if (canHover) {
+      cards.forEach((c) => {
+        c.addEventListener('mouseenter', () => on(c));
+        c.addEventListener('mouseleave', () => off(c));
+        c.addEventListener('focusin', () => on(c));
+        c.addEventListener('focusout', () => off(c));
+      });
+    } else if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((es) => es.forEach((e) => (e.intersectionRatio > 0.6 ? on(e.target) : off(e.target))), { threshold: [0, 0.6] });
+      cards.forEach((c) => io.observe(c));
+    }
   }
 
   /* ---------- Kontaktformular: prüfen und ohne Neuladen senden ---------- */

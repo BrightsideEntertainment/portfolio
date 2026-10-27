@@ -1,18 +1,23 @@
 # Aufnahme «Hören, wer ich bin»
 
-Ziel: ca. 20 Sekunden, ruhig gesprochen. Die Datei kommt als `public/assets/audio/stimme.mp3` ins Repo.
-Die Wellenform auf der Startseite wird automatisch aus der Aufnahme berechnet.
+Ziel: ca. 10 Sekunden, ruhig gesprochen. Die Datei kommt als `public/assets/audio/stimme.mp3` ins Repo.
+Auf der Startseite leuchtet jedes Wort auf, während es gesprochen wird. Deshalb muss der Text genau so gesprochen werden, wie er auf der Seite steht.
 
-## Skript
+## Skript (wörtlich)
 
-> Grüezi, ich bin Thomas.
-> Lange habe ich Gäste empfangen, als Butler und als Sommelier.
-> Heute mache ich dasselbe mit Mikrofon und Kamera.
-> Ich moderiere, produziere Podcasts und schneide Filme.
-> Und frage mich jedes Mal: Wie fühlt sich dieser Moment für die Menschen an, die ihn erleben?
+> Ich gebe Momenten eine Stimme.
+> *(kurze Pause)*
+> Ich bin Thomas Häder, Moderator, Podcaster und Filmer in Chur.
 
 ## Technik
 
-- Mono, 44,1 kHz, MP3 mit 128 kbit/s (unter 400 KB)
+- Mono, 44,1 kHz, MP3 mit 128 kbit/s (unter 200 KB)
 - Kurze Stille am Anfang und Ende wegschneiden, Lautheit etwa −16 LUFS
-- Nach der Aufnahme die Startzeiten der Sätze notieren und in `public/index.html` bei `data-t` eintragen, damit das Transkript im Takt mitläuft
+
+## Wortgenaue Zeitmarken
+
+1. WhisperX installieren: `pip install whisperx`
+2. `whisperx stimme.mp3 --language de --output_format json`
+3. Aus der JSON-Datei pro Wort einen Cue in `public/assets/audio/stimme.vtt` schreiben (Start --> Ende, darunter das Wort).
+   Es müssen genau 15 Cues sein, in derselben Reihenfolge wie die Wörter auf der Seite.
+4. Stimmt die Anzahl nicht, nimmt die Seite automatisch die Zeiten aus `data-times` im HTML.

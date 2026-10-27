@@ -1,0 +1,36 @@
+# Vorschau: jeder Push auf den Branch "staging" landet im Unterordner /staging/ der Subdomain.
+# Die Live-Seite (Branch main) bleibt unberührt. Suchmaschinen sollen die Vorschau nicht indexieren.
+name: Deploy Staging
+
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code auschecken
+        uses: actions/checkout@v4
+
+      - name: Vorschau nicht indexieren
+        run: |
+          for f in public/*.html; do
+            sed -i 's|<meta charset="utf-8">|<meta charset="utf-8">\n  <meta name="robots" content="noindex, nofollow">|' "$f"
+          done
+
+      - name: Upload via FTPS in /staging/
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./public/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}staging/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            includes/config.php
+            uploads/**
