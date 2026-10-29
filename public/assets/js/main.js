@@ -111,7 +111,7 @@
     const hasGsap = !!(window.gsap && window.SplitText);
 
     let words = [];            // [{el, t, end}]
-    let duration = 10;
+    let duration = parseFloat(root.querySelector('.seek').max) || 7;
     let readAlong = false;     // ohne Aufnahme: der Satz läuft im selben Takt mit
     let clock = 0;             // Zeit im Mitlese-Modus
     let playing = false;

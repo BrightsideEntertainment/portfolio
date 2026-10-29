@@ -99,9 +99,9 @@ p { margin: 0; }
 @keyframes rec { 50% { opacity: .25; } }
 
 .voice-line {
-  font-size: clamp(3.5rem, 10.2vw, 9.25rem);
-  line-height: .9;
-  letter-spacing: -.025em;
+  font-size: clamp(5rem, 21vw, 16rem);
+  line-height: .85;
+  letter-spacing: -.035em;
   max-width: 11ch;
 }
 .voice-line .w, .lede .w { transition: color .35s var(--ease); }

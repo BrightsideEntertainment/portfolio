@@ -13,7 +13,7 @@ Eine persönliche Portfolio-Website für meine Arbeit als Moderator, Podcast-Pro
 
 Ich habe lange als Butler und Sommelier gearbeitet, heute moderiere und produziere ich. Der rote Faden ist das Empfangen und Führen von Menschen. Die Seite übersetzt das so:
 
-- **Die Stimme schreibt den Satz (Signatur):** Im Hero liest meine Stimme «Ich gebe Momenten eine Stimme.» vor. Jedes Wort wird beim Sprechen dunkel, das aktuelle steht kursiv in Salbei. Ein Klick auf ein Wort springt an diese Stelle. Technik: GSAP SplitText zerlegt den Satz, `gsap.ticker` koppelt ihn an `audio.currentTime`, wortgenaue Zeitmarken kommen aus `assets/audio/stimme.vtt` (WebVTT, mit WhisperX erzeugt). Ohne Aufnahme läuft der Satz im selben Takt zum Mitlesen.
+- **Die Stimme schreibt den Satz (Signatur):** Im Hero sagt meine Stimme «Bühne frei.» und stellt mich in einem Satz vor. Jedes Wort wird beim Sprechen dunkel, das aktuelle steht kursiv in Salbei. Ein Klick auf ein Wort springt an diese Stelle. Technik: GSAP SplitText zerlegt den Satz, `gsap.ticker` koppelt ihn an `audio.currentTime`, wortgenaue Zeitmarken kommen aus `assets/audio/stimme.vtt` (WebVTT, mit WhisperX erzeugt). Ohne Aufnahme läuft der Satz im selben Takt zum Mitlesen.
 - **Arbeiten:** Karten mit Standbild; bei Hover (Handy: wenn die Karte im Bild ist) läuft ein stummer Clip (`data-clip`).
 - **Seitenwechsel:** native Cross-Document View Transitions, ohne Bibliothek.
 - **Scrollen:** Lenis für weiches Scrollen am Desktop, GSAP ScrollTrigger für Parallax (Bilder, Plakat-Schrift, Porträt) und das Zurücktreten des Hero. Überschriften steigen mit SplitText Zeile für Zeile aus einer Maske. SplitText ersetzt SplitType, weil es zu GSAP gehört und Screenreader berücksichtigt.
