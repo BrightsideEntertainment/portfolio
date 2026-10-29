@@ -13,6 +13,7 @@ Eine persönliche Portfolio-Website für meine Arbeit als Moderator, Podcast-Pro
 
 Ich habe lange als Butler und Sommelier gearbeitet, heute moderiere und produziere ich. Der rote Faden ist das Empfangen und Führen von Menschen. Die Seite übersetzt das so:
 
+- **Startfilm:** Hinter «Bühne frei.» läuft stumm ein Retro-Mikrofon im Spotlight (Loop vorwärts und rückwärts, WebM/VP9 mit MP4-Fallback, 1920 px für Desktop, 720 px Hochformat fürs Handy, 0,5–2 MB). Er startet nie bei «weniger Bewegung», lässt sich jederzeit anhalten (WCAG 2.2.2) und pausiert ausserhalb des Bildes. Footage: SeventyFour via Artlist (lizenziert).
 - **Die Stimme schreibt den Satz (Signatur):** Im Hero sagt meine Stimme «Bühne frei.» und stellt mich in einem Satz vor. Jedes Wort wird beim Sprechen dunkel, das aktuelle steht kursiv in Salbei. Ein Klick auf ein Wort springt an diese Stelle. Technik: GSAP SplitText zerlegt den Satz, `gsap.ticker` koppelt ihn an `audio.currentTime`, wortgenaue Zeitmarken kommen aus `assets/audio/stimme.vtt` (WebVTT, mit WhisperX erzeugt). Ohne Aufnahme läuft der Satz im selben Takt zum Mitlesen.
 - **Arbeiten:** Karten mit Standbild; bei Hover (Handy: wenn die Karte im Bild ist) läuft ein stummer Clip (`data-clip`).
 - **Seitenwechsel:** native Cross-Document View Transitions, ohne Bibliothek.

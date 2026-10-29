@@ -5,13 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Thomas Häder – Moderation, Podcast, Film · Chur</title>
   <meta name="description" content="Bühne frei: Thomas Häder, Moderator, Podcaster und Filmer aus Chur. Podcasts, Reportagen und Porträts.">
-  <meta name="theme-color" content="#fafaf9">
+  <meta name="theme-color" content="#141414">
+  <link rel="preload" href="assets/video/buehne-poster.jpg" as="image" media="(min-width: 701px)">
+  <link rel="preload" href="assets/video/buehne-poster-720.jpg" as="image" media="(max-width: 700px)">
   <link rel="preload" href="assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/style.css">
   <script>document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.add('motion-ready')},2500);</script>
 </head>
-<body>
+<body class="page-home">
   <a class="skip" href="#inhalt">Zum Inhalt springen</a>
 
   <header class="site-head">
@@ -29,9 +31,14 @@
 
   <main id="inhalt">
     <!-- Hero: «Bühne frei.» – die Stimme schreibt den Satz -->
-    <section class="hero" id="stimme" aria-labelledby="hero-titel">
-      <div class="wrap hero-grid">
-        <div>
+    <section class="hero hero-film" id="stimme" aria-labelledby="hero-titel">
+      <div class="film" aria-hidden="true">
+        <video class="film-video" muted loop playsinline preload="metadata" poster="assets/video/buehne-poster.jpg" data-poster-sm="assets/video/buehne-poster-720.jpg" data-sm="assets/video/buehne-720">
+          <source src="assets/video/buehne-1920.webm" type="video/webm">
+          <source src="assets/video/buehne-1920.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="wrap hero-inner">
           <p class="timecode mono"><span class="rec" aria-hidden="true"></span><span class="voice-time">0:00 / 0:07</span><span aria-hidden="true">·</span><span class="voice-label">Hören, wer ich bin</span></p>
           <h1 id="hero-titel" class="voice-line" data-times="0.35 0.95">Bühne <span class="accent">frei.</span></h1>
 
@@ -50,13 +57,8 @@
           <p class="lede"><span class="spoken" data-times="2.00 2.22 2.46 2.84 3.46 4.26 4.98 5.16 5.70 5.88">Ich bin Thomas Häder, Moderator, Podcaster und Filmer in Chur.</span> Früher Butler und Sommelier. Auf Deutsch, Italienisch und Englisch.</p>
 
           <audio id="stimme-audio" preload="metadata" src="assets/audio/stimme.mp3"></audio>
-        </div>
-
-        <figure class="portrait">
-          <span class="monogram" aria-hidden="true">Th</span>
-          <img src="assets/img/portrait.jpg" alt="Porträt von Thomas Häder" width="600" height="750" onerror="this.remove()">
-        </figure>
       </div>
+      <button class="film-toggle mono" type="button" aria-pressed="false" hidden>Film anhalten</button>
     </section>
 
     <!-- Arbeiten -->

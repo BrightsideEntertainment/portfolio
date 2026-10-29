@@ -11,7 +11,10 @@
   /* ---------- Kopfzeile: Linie erst nach dem Scrollen ---------- */
   const head = document.querySelector('.site-head');
   if (head) {
-    const onScroll = () => head.classList.toggle('is-scrolled', window.scrollY > 8);
+    const film = document.querySelector('.hero-film');
+    // Auf der Startseite wird die Kopfzeile erst hell, wenn der Film vorbei ist
+    const limit = () => (film ? film.offsetHeight - head.offsetHeight : 8);
+    const onScroll = () => head.classList.toggle('is-scrolled', window.scrollY > limit());
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   }
@@ -75,8 +78,11 @@
       parallax('.poster-word', '18%', '-18%');
       parallax('.portrait .monogram', '-25%', '25%');
 
-      // Hero tritt beim Wegscrollen leise zurück
+      // Hero tritt beim Wegscrollen leise zurück, der Film zoomt langsam ins Mikrofon
       const hero = document.querySelector('.hero');
+      if (hero && document.querySelector('.film-video')) {
+        gsap.fromTo('.film-video', { '--zoom': 1.04 }, { '--zoom': 1.18, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+      }
       if (hero) {
         gsap.to('.hero .voice-line', {
           yPercent: -12, opacity: 0.35, ease: 'none',
@@ -96,6 +102,39 @@
     });
   } else {
     root.classList.add('motion-ready');
+  }
+
+  /* ---------- Startfilm: läuft stumm im Loop, nie bei «weniger Bewegung», jederzeit anhaltbar ---------- */
+  const filmVideo = document.querySelector('.film-video');
+  if (filmVideo) {
+    const toggle = document.querySelector('.film-toggle');
+    // Handy: Hochformat-Schnitt (720 px, ca. 1 MB) statt der 1920er-Datei
+    if (window.matchMedia('(max-width: 700px)').matches && filmVideo.dataset.sm) {
+      filmVideo.poster = filmVideo.dataset.posterSm;
+      const [webm, mp4] = filmVideo.querySelectorAll('source');
+      webm.src = filmVideo.dataset.sm + '.webm';
+      mp4.src = filmVideo.dataset.sm + '.mp4';
+      filmVideo.load();
+    }
+    let userPaused = reduceMotion;
+    const setLabel = () => {
+      const paused = filmVideo.paused;
+      toggle.textContent = paused ? 'Film abspielen' : 'Film anhalten';
+      toggle.setAttribute('aria-pressed', String(paused));
+    };
+    const start = () => { if (!userPaused) filmVideo.play().then(setLabel).catch(setLabel); };
+    toggle.hidden = false;
+    toggle.addEventListener('click', () => {
+      if (filmVideo.paused) { userPaused = false; filmVideo.play().then(setLabel).catch(setLabel); }
+      else { userPaused = true; filmVideo.pause(); setLabel(); }
+    });
+    filmVideo.addEventListener('play', setLabel);
+    filmVideo.addEventListener('pause', setLabel);
+    // Nur abspielen, solange der Film im Bild ist (spart Akku und Daten)
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((es) => es.forEach((e) => (e.isIntersecting ? start() : filmVideo.pause()))).observe(filmVideo);
+    } else { start(); }
+    setLabel();
   }
 
   /* ---------- 1. Die Stimme schreibt den Satz ---------- */
