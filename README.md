@@ -13,12 +13,12 @@ Eine persönliche Portfolio-Website für meine Arbeit als Moderator, Podcast-Pro
 
 Ich habe lange als Butler und Sommelier gearbeitet, heute moderiere und produziere ich. Der rote Faden ist das Empfangen und Führen von Menschen. Die Seite übersetzt das so:
 
-- **Die Stimme schreibt den Satz (Signatur):** Im Hero liest meine Stimme «Ich gebe Momenten eine Stimme.» vor. Jedes Wort wird beim Sprechen dunkel, das aktuelle steht kursiv in Messing. Ein Klick auf ein Wort springt an diese Stelle. Technik: GSAP SplitText zerlegt den Satz, `gsap.ticker` koppelt ihn an `audio.currentTime`, wortgenaue Zeitmarken kommen aus `assets/audio/stimme.vtt` (WebVTT, mit WhisperX erzeugt). Ohne Aufnahme läuft der Satz im selben Takt zum Mitlesen.
+- **Die Stimme schreibt den Satz (Signatur):** Im Hero liest meine Stimme «Ich gebe Momenten eine Stimme.» vor. Jedes Wort wird beim Sprechen dunkel, das aktuelle steht kursiv in Salbei. Ein Klick auf ein Wort springt an diese Stelle. Technik: GSAP SplitText zerlegt den Satz, `gsap.ticker` koppelt ihn an `audio.currentTime`, wortgenaue Zeitmarken kommen aus `assets/audio/stimme.vtt` (WebVTT, mit WhisperX erzeugt). Ohne Aufnahme läuft der Satz im selben Takt zum Mitlesen.
 - **Arbeiten:** Karten mit Standbild; bei Hover (Handy: wenn die Karte im Bild ist) läuft ein stummer Clip (`data-clip`).
 - **Seitenwechsel:** native Cross-Document View Transitions, ohne Bibliothek.
 - **Scrollen:** Lenis für weiches Scrollen am Desktop, GSAP ScrollTrigger für Parallax (Bilder, Plakat-Schrift, Porträt) und das Zurücktreten des Hero. Überschriften steigen mit SplitText Zeile für Zeile aus einer Maske. SplitText ersetzt SplitType, weil es zu GSAP gehört und Screenreader berücksichtigt.
 - **Typografie:** Instrument Serif mit Kursive für die Stimme, Geist für Text, Geist Mono für Timecodes. Alle Schriften lokal (nDSG).
-- **Farbe:** Leinen `#f3efe9`, Tinte `#151311`, Akzent Messing `#8a5a1c` (Kontrast 5:1), Champagner `#e2c290` auf dunklem Grund.
+- **Farbe «Salbei»:** Weiss `#fafaf9`, Hellgrau `#ededeb`, Grau `#6b6b6b`, Schwarz `#141414`. Akzent Salbei in zwei Stufen: tief `#4f6b52` für Text (5,7:1), blass `#c9d6c4` für Flächen und auf Schwarz (12:1).
 - **Ruhig für alle:** `prefers-reduced-motion` schaltet Bewegung ab, das Wort-Highlight bleibt als Farbe. Player komplett per Tastatur (Button, Schieberegler), Screenreader lesen den ganzen Satz (`aria`-Option von SplitText).
 
 Design in Figma: Seite «Startseite» (Desktop 1440, Handy 390, Interaktionen & Regeln).
