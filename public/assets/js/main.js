@@ -2,7 +2,8 @@
    Alles funktioniert auch ohne JavaScript; dieses Skript ergänzt nur.
    1. Die Stimme schreibt den Satz (GSAP SplitText + gsap.ticker an audio.currentTime)
    2. Arbeiten: stummer Clip bei Hover (Handy: wenn die Karte im Bild ist)
-   3. Seitenwechsel: native View Transitions (nur CSS)                        */
+   3. Seitenwechsel: native View Transitions (nur CSS)
+   4. Scrollen: Lenis, Text-Reveal mit SplitText, Parallax mit ScrollTrigger   */
 (() => {
   'use strict';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -29,6 +30,72 @@
         io.observe(el);
       }
     });
+  }
+
+  /* ---------- Bewegung beim Scrollen: Lenis + GSAP ScrollTrigger + SplitText ----------
+     Alles nur, wenn niemand «weniger Bewegung» eingestellt hat. Ohne Bibliotheken bleibt die Seite ruhig. */
+  const root = document.documentElement;
+  const hasMotion = !reduceMotion && window.gsap && window.ScrollTrigger && window.SplitText;
+  if (hasMotion) {
+    gsap.registerPlugin(ScrollTrigger, SplitText);
+
+    // Butterweiches Scrollen am Desktop (Touch bleibt nativ), synchron mit ScrollTrigger
+    if (window.Lenis) {
+      const lenis = new Lenis({ autoRaf: false, anchors: { offset: -80 }, lerp: 0.1 });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+      window.__lenis = lenis;
+    }
+
+    const ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    ready.then(() => {
+      // Text-Reveal: Überschriften steigen Zeile für Zeile aus einer Maske
+      const heads = document.querySelectorAll('.section-head h2, .about-grid h1, .photos-intro h1, .contact-invite h1, .quote p, .stations .what');
+      heads.forEach((el) => {
+        el.classList.remove('reveal', 'pending');
+        SplitText.create(el, {
+          type: 'lines', mask: 'lines', linesClass: 'line', autoSplit: true, aria: 'auto',
+          onSplit: (self) => gsap.from(self.lines, {
+            yPercent: 110, duration: 1.15, ease: 'expo.out', stagger: 0.09,
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+          }),
+        });
+      });
+      root.classList.add('motion-ready');
+
+      // Parallax: Bilder und Plakat-Schrift bewegen sich langsamer als die Seite
+      const parallax = (targets, from, to) => gsap.utils.toArray(targets).forEach((el) => {
+        gsap.fromTo(el, { '--py': from }, {
+          '--py': to, ease: 'none',
+          scrollTrigger: { trigger: el.closest('.work-media, .photo, .portrait') || el, start: 'top bottom', end: 'bottom top', scrub: true },
+        });
+      });
+      parallax('.work-media img, .photo-open img', '-6%', '6%');
+      parallax('.poster-word', '18%', '-18%');
+      parallax('.portrait .monogram', '-25%', '25%');
+
+      // Hero tritt beim Wegscrollen leise zurück
+      const hero = document.querySelector('.hero');
+      if (hero) {
+        gsap.to('.hero .voice-line', {
+          yPercent: -12, opacity: 0.35, ease: 'none',
+          scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true },
+        });
+      }
+
+      // «Projekt anfragen» gleitet beim Hereinscrollen in Position
+      const cta = document.querySelector('.closing-cta');
+      if (cta) {
+        gsap.fromTo(cta, { xPercent: -6, opacity: 0.25 }, {
+          xPercent: 0, opacity: 1, ease: 'none',
+          scrollTrigger: { trigger: '.closing', start: 'top bottom', end: 'top 35%', scrub: true },
+        });
+      }
+      ScrollTrigger.refresh();
+    });
+  } else {
+    root.classList.add('motion-ready');
   }
 
   /* ---------- 1. Die Stimme schreibt den Satz ---------- */
@@ -229,11 +296,11 @@
     items.forEach((btn, i) => btn.addEventListener('click', () => {
       const img = btn.querySelector('img');
       img.style.viewTransitionName = 'foto';           // Bild «fliegt» aus dem Raster in die Grossansicht
-      vt(() => { img.style.viewTransitionName = ''; show(i); lb.showModal(); });
+      vt(() => { img.style.viewTransitionName = ''; show(i); lb.showModal(); window.__lenis && window.__lenis.stop(); });
     }));
     const close = () => {
       const img = items[idx].querySelector('img');
-      vt(() => { lb.close(); img.style.viewTransitionName = 'foto'; });
+      vt(() => { lb.close(); window.__lenis && window.__lenis.start(); img.style.viewTransitionName = 'foto'; });
       setTimeout(() => { img.style.viewTransitionName = ''; items[idx].focus(); }, 450);
     };
     lb.querySelector('.lb-close').addEventListener('click', close);

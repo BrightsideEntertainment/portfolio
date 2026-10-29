@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#f3efe9">
   <link rel="preload" href="assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/style.css">
-  <script>document.documentElement.classList.add('js');</script>
+  <script>document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.add('motion-ready')},2500);</script>
 </head>
 <body>
   <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -35,7 +35,7 @@
         </figure>
         <div class="about-text">
           <p class="mono">Über mich</p>
-          <h1>Bevor ich Mikrofone hielt, habe ich <em>Gläser</em> gehalten.</h1>
+          <h1 class="split-pending">Bevor ich Mikrofone hielt, habe ich <em>Gläser</em> gehalten.</h1>
           <p>Als Butler auf Kreuzfahrtschiffen und als Sommelier in Fünf-Sterne-Häusern habe ich gelernt, einen Raum zu lesen, bevor jemand etwas sagt. Genau das tue ich heute als Moderator, im Podcast-Studio und am Schnittplatz: Ich führe Menschen durch einen Moment und sorge dafür, dass er bei ihnen ankommt.</p>
           <p>Ich lebe in Chur und studiere Multimedia Production mit Schwerpunkt Live Communication an der FH Graubünden.</p>
           <div class="langs mono" aria-label="Sprachen"><span>Deutsch</span><span>Italiano</span><span>English</span></div>
@@ -80,6 +80,10 @@
     </div>
   </footer>
 
+  <script src="assets/lib/gsap.min.js" defer></script>
+  <script src="assets/lib/ScrollTrigger.min.js" defer></script>
+  <script src="assets/lib/SplitText.min.js" defer></script>
+  <script src="assets/lib/lenis.min.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>
